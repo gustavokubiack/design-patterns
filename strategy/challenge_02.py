@@ -18,39 +18,71 @@ from abc import ABC, abstractmethod
 
 
 class DiscountStrategy(ABC):
-    
     @abstractmethod
     def apply_discount(self, value: float):
+        pass
+
+    @abstractmethod
+    def __str__(self) -> str:
         pass
 
 
 class LoyaltyDiscount(DiscountStrategy):
     def apply_discount(self, value: float):
-        ...
+        return value * 0.05
+
+    def __str__(self) -> str:
+        return "Fidelidade"
 
 
 class SeasonalDiscount(DiscountStrategy):
     def apply_discount(self, value: float):
-        ...
+        return value * 0.10
+
+    def __str__(self) -> str:
+        return "Compras em promoção"
 
 
 class BulkPurchaseDiscount(DiscountStrategy):
     def apply_discount(self, value: float):
-        ...
+        return value * 0.15
+
+    def __str__(self) -> str:
+        return "Grandes quantidades"
 
 
 class ShoppingCart:
-    def __init__(self, value: float,  discount_strategy: DiscountStrategy) -> None: 
+    def __init__(self, value: float, discount_strategy: DiscountStrategy) -> None:
         self.value = value
         self._discount_strategy = discount_strategy
 
     @property
     def discount_strategy(self):
         return self._discount_strategy
-    
+
     @discount_strategy.setter
     def discount_strategy(self, discount_strategy: DiscountStrategy):
         self._discount_strategy = discount_strategy
 
-    def total_price(self):
-        ...
+    def final_price(self) -> float:
+        return self._discount_strategy.apply_discount(self.value)
+
+
+if __name__ == "__main__":
+    purchase = float(input("Insira o valor da compra: "))
+    method = input(
+        "Insira o método de desconto: \n 1 - Fidelidade \n 2 - Compras em Promoção \n 3 - Grandes quantidades\n"
+    )
+    map_strategy = {
+        "1": LoyaltyDiscount(),
+        "2": SeasonalDiscount(),
+        "3": BulkPurchaseDiscount(),
+    }
+    if method not in map_strategy.keys():
+        raise Exception("Método de desconto inexistente!")
+
+    instance = ShoppingCart(purchase, map_strategy[method])
+    discount = instance.final_price()
+    print(
+        f"Usando o método {map_strategy[method]} a compra de R${purchase} terá um desconto de R${discount}"
+    )

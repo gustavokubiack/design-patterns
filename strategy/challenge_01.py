@@ -19,7 +19,6 @@ from abc import ABC, abstractmethod
 
 
 class TravelStrategy(ABC):
-
     @abstractmethod
     def travel_time(self, distance: float):
         pass
@@ -30,7 +29,6 @@ class TravelStrategy(ABC):
 
 
 class CarStrategy(TravelStrategy):
-
     def travel_time(self, distance: float):
         return round(distance / 60, 2)
 
@@ -39,7 +37,6 @@ class CarStrategy(TravelStrategy):
 
 
 class BicycleStrategy(TravelStrategy):
-
     def travel_time(self, distance: float):
         return round(distance / 15, 2)
 
@@ -48,7 +45,6 @@ class BicycleStrategy(TravelStrategy):
 
 
 class WalkStrategy(TravelStrategy):
-
     def travel_time(self, distance: float):
         return round(distance / 5, 2)
 
@@ -86,7 +82,7 @@ if __name__ == "__main__":
     }
     if travel not in map_strategy.keys():
         raise Exception("Meio de transporte inexistente!")
-    
+
     instance = TravelContext(distance, map_strategy[travel])
     result = instance.calculate_time()
     hours = int(result)
